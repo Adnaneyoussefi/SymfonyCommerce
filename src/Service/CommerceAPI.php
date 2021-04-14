@@ -5,8 +5,7 @@ namespace App\Service;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Service\Iservice;
-
-
+use App\Service\ProduitService;
 
 class CommerceAPI implements Iservice {
 
@@ -19,41 +18,27 @@ class CommerceAPI implements Iservice {
 
     public function getModels(): array {
         $soapClient = new \SoapClient($this->api_commerce);
-        return ["produit" => $this->getProduits($soapClient)];
+        $produitService = new ProduitService();
+        return ["produit" => $produitService->getProduits($soapClient)];
     }
 
-    /**
-     * @return Produit[]
-     */
-    public function getProduits($soapClient): array {
-        $categories = $soapClient->getListCategories();
-        $produits = $soapClient->getListProduits();
-        $produitsObject = [];
-        $categoriesObject = [];
+    public function getModelById($id) {
+        $soapClient = new \SoapClient($this->api_commerce);
+        $produitService = new ProduitService();
+        return $produitService->getProduitById($id, $soapClient);
+    }
 
-        foreach($categories as $c) {
-            $categorie = new Categorie();
-            $categorie->setId($c->id)
-                      ->setNom($c->nom);
-            array_push($categoriesObject, $categorie);           
-        }
-        foreach($produits as $p) {
-            $produit = new Produit();
-            $produit->setId($p->id)
-                    ->setNom($p->nom)
-                    ->setDescription($p->description)
-                    ->setPrix($p->prix)
-                    ->setImage($p->image)
-                    ->setQuantite($p->quantite);
-            
-            foreach($categoriesObject as $ca) {
-                if($p->categorie->id === $ca->getId()) {
-                    $ca->addProduit($produit);  
-                    $produit->setCategorie($ca);
-                }
-            }
-            array_push($produitsObject, $produit);
-        }
-        return $produitsObject;
+    public function deleteModelById($id) {
+        $soapClient = new \SoapClient($this->api_commerce);
+        $produitService = new ProduitService();
+        return $produitService->deleteProduitById($id, $soapClient);
+    }
+
+    public function addModel() {
+       
+    }
+
+    public function updateModelById($id) {
+       
     }
 }

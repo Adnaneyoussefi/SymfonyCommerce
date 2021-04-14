@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+    
+    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom du produit"}}) }}
+    {{ form_row(form.description, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Description"}}) }}
+    {{ form_row(form.prix, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Prix"} }) }}
+    {{ form_row(form.quantite, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Quantite"}}) }}
+    {{ form_row(form.categorie, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Categorie"}}) }}
+    <button class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
+    <a href="{{ path('produits') }}" class="btn btn-outline-success">Retour à la liste</a>
+{{ form_end(form) }}
