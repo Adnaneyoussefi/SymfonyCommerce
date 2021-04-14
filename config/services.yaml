@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-
+    app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -20,6 +20,18 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+
+    # ajouter le service de CountryAPI
+    App\Service\CommerceAPI:
+        arguments:
+            $api_commerce: '%app.api_commerce%' 
+
+    all_data.commerce:
+        class: App\Service\AllData
+        arguments:
+            $service: '@App\Service\CommerceAPI'
+    
+    App\Service\AllData $commerce: '@all_data.commerce'        
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
