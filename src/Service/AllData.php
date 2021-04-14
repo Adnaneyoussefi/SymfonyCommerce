@@ -5,8 +5,8 @@ namespace App\Service;
 use App\Service\IAllData;
 use App\Service\Iservice;
 
-class AllData implements IAllData {
-    
+class AllData {
+
     private Iservice $service;
 
     public function __construct(Iservice $service)

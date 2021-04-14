@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use CategorieService;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Service\Iservice;
@@ -19,7 +20,9 @@ class CommerceAPI implements Iservice {
 
     public function getModels(): array {
         $soapClient = new \SoapClient($this->api_commerce);
-        return ["produit" => $this->getProduits($soapClient)];
+        $categorieService = new CategorieService();
+        return ["produit" => $this->getProduits($soapClient),
+                "categorie" => $categorieService->getCategories($soapClient)];
     }
 
     /**
@@ -45,7 +48,6 @@ class CommerceAPI implements Iservice {
                     ->setPrix($p->prix)
                     ->setImage($p->image)
                     ->setQuantite($p->quantite);
-            
             foreach($categoriesObject as $ca) {
                 if($p->categorie->id === $ca->getId()) {
                     $ca->addProduit($produit);  
@@ -56,4 +58,6 @@ class CommerceAPI implements Iservice {
         }
         return $produitsObject;
     }
+
+
 }
