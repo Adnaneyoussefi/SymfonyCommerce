@@ -1,8 +1,11 @@
 <?php
 
-use App\Entity\Categorie;
+namespace App\Service;
 
-class CategorieService{
+use App\Entity\Categorie;
+use App\Service\RessourceInterface;
+
+class CategorieService implements RessourceInterface {
 
     /**
      * @return Categorie[]
@@ -21,16 +24,24 @@ class CategorieService{
         return $categoriesObject;
     }
 
-    public function deleteCategorie($get,$soapClient): void {
+    public function delete($get,$soapClient): void {
             try {
                 $categories = $soapClient->deleteCategorie($get);
               
             } catch (Exception $e) {
                 
             }
-        }
     }
 
+    public function get($id, $soapClient) {
+       
+    }
 
+    public function add() {
 
-?>
+    }
+
+    public function update($id, $soapClient) {
+        
+    }
+}

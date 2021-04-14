@@ -4,8 +4,9 @@ namespace App\Service;
 
 use App\Entity\Produit;
 use App\Entity\Categorie;
+use App\Service\RessourceInterface;
 
-class ProduitService {
+class ProduitService implements RessourceInterface {
 
     /**
      * @return Produit[]
@@ -45,14 +46,22 @@ class ProduitService {
     /**
      * @return Produit[]
      */
-    public function getProduitById($id, $soapClient) {
+    public function get($id, $soapClient) {
         $p = array_filter($this->getProduits($soapClient), function($x) use($id) {
             return $x->getId() == $id;
         });
         return [...$p][0];
     }
 
-    public function deleteProduitById($id, $soapClient) {
+    public function delete($id, $soapClient) {
         return $soapClient->deleteProduit($id);
+    }
+
+    public function add() {
+
+    }
+
+    public function update($id, $soapClient) {
+        
     }
 }

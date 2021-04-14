@@ -20,16 +20,20 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+    
+    App\Service\ProduitService: ~
 
     # ajouter le service de CountryAPI
     App\Service\CommerceAPI:
         arguments:
             $api_commerce: '%app.api_commerce%' 
+            $ressourceInterface: '@App\Service\ProduitService'
 
     all_data.commerce:
         class: App\Service\AllData
         arguments:
             $service: '@App\Service\CommerceAPI'
+
     
     App\Service\AllData $commerce: '@all_data.commerce'        
 
