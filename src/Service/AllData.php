@@ -25,4 +25,20 @@ class AllData {
     public function getAllData(): array {
         return $this->service->getModels();
     }
+
+    public function getDataById($id) {
+        return $this->service->getModelById($id);
+    }
+
+    public function addData() {
+        return $this->service->addModel();
+    }
+
+    public function updateDataById($id) {
+        return $this->service->updateModelById($id);
+    }
+
+    public function deleteDataById($id) {
+        return $this->service->deleteModelById($id);
+    }
 }
