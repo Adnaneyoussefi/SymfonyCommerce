@@ -1,10 +1,31 @@
-{{ form_start(form) }}
-    
-    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom du produit"}}) }}
-    {{ form_row(form.description, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Description"}}) }}
-    {{ form_row(form.prix, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Prix"} }) }}
-    {{ form_row(form.quantite, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Quantite"}}) }}
-    {{ form_row(form.categorie, {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Categorie"}}) }}
-    <button class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
-    <a href="{{ path('produits') }}" class="btn btn-outline-success">Retour à la liste</a>
-{{ form_end(form) }}
+<div class="container mt-5">
+	<form name="produit" method="post">
+		<div class="form-group">
+			<label for="nom">Nom</label>
+			<input value="{{ produit.nom|default('') }}" name="nom" type="text" class="form-control" id="nom" aria-describedby="nom" placeholder="Entrez nom">
+		</div>
+		<div class="form-group">
+			<label for="description">Description</label>
+			<input value="{{ produit.description|default('') }}" name="description" type="text" class="form-control" id="description" placeholder="Description">
+		</div>
+		<div class="form-group">
+			<label for="prix">Prix</label>
+			<input value="{{ produit.prix|default('') }}" name="prix" type="text" class="form-control" id="prix" placeholder="Prix">
+		</div>
+		<div class="form-group">
+			<label for="quantite">Quantité</label>
+			<input value="{{ produit.quantite|default('') }}" name="quantite" type="text" class="form-control" id="quantite" placeholder="Quantité">
+		</div>
+		<div class="form-group">
+			<select name="categorie" class="custom-select">
+				{% for categorie in categories %}
+				<option value="{{categorie.id}}" {{ produit.categorie.id|default('') == categorie.id ? 'selected' : '' }}>{{categorie.nom}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="form-group">
+			<button name="{{ button_label|default('Ajouter') }}" class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
+            <a href="{{ path('produits') }}" class="btn btn-outline-success">Retour à la liste</a>
+		</div>
+	</form>
+</div>

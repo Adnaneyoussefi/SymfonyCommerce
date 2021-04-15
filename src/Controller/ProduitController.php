@@ -27,50 +27,36 @@ class ProduitController extends AbstractController
      /**
      * @Route("/produits/new", name="produit_new")
      */
-    public function new(AllData $commerceProduit, Request $request): Response
+    public function new(AllData $commerceProduit, AllData $commerceCategorie, Request $request): Response
     {
-        $produit = new Produit();
-        $form = $this->createForm(ProduitType::class, $produit);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /*$entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($categorie);
-            $entityManager->flush();
-            $this->addFlash('success', 'Vous avez ajouter la catégorie avec succées !');*/
-
-
+        $categories = $commerceCategorie->getAllData()["categorie"];
+        if(isset($_POST['Ajouter'])) {
+            $commerceProduit->addData($_POST);
+            $this->addFlash('success', 'Vous avez ajouter le produit avec succées !');
             return $this->redirectToRoute('produits');
         }
-
         return $this->render('produit/new.html.twig', [
-            'produit' => $produit,
-            'form' => $form->createView(),
+            'categories' => $categories,
         ]);
     }
 
    /**
-     * @Route("/produits/{id}", name="produit_edit", methods={"GET","POST"})
+     * @Route("/produits/{id}/edit", name="produit_edit", methods={"GET","POST"})
      */
-    public function edit(AllData $commerceProduit, Request $request, $id): Response
+    public function edit(AllData $commerceProduit, AllData $commerceCategorie, Request $request, $id): Response
     {
-        //$repos = $this->getDoctrine()->getRepository(Produit::class)->findOneBy(['id' => $produit->getId()]);
         $repos = $commerceProduit->getDataById($id);
-        $form = $this->createForm(ProduitType::class, $repos);
-        $form->handleRequest($request);
+        $categories = $commerceCategorie->getAllData()["categorie"];
 
-        /*if ($form->isSubmitted() && $form->isValid()) {
-            
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Le produit '.$produit->getId().' est bien modifié!');
-
+        if(isset($_POST['Modifier'])) {
+            $commerceProduit->updateDataById($id, $_POST);
+            $this->addFlash('success', 'Vous avez modifié le produit avec succées !');
             return $this->redirectToRoute('produits');
-        }*/
-        //dd($commerce->getDataById($id));
+        }
 
         return $this->render('produit/edit.html.twig', [
             'produit' => $repos,
-            'form' => $form->createView(),
+            'categories' => $categories
         ]);
     }
 

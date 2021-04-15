@@ -58,10 +58,12 @@ class ProduitService implements RessourceInterface {
     }
 
     public function add($obj, $soapClient) {
-
+        return $soapClient->addNewProduit($obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
+        $obj['categorie']);
     }
 
     public function update($id, $obj, $soapClient) {
-        
+        return $soapClient->updateProduit($id, $obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
+        $obj['categorie']);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Produit;
+use App\Service\AllData;
 use App\Entity\Categorie;
+use App\Service\CommerceAPI;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +21,7 @@ class ProduitType extends AbstractType
             ->add('prix')
             ->add('quantite')
             ->add('categorie', ChoiceType::class, [
-                
+                'choices' => $categories
                 ])
         ;
     }
