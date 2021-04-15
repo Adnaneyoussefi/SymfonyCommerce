@@ -6,9 +6,9 @@ interface RessourceInterface {
     
     public function get($id, $soapClient);
 
-    public function add();
+    public function add($obj, $soapClient);
 
-    public function update($id, $soapClient);
+    public function update($id, $obj, $soapClient);
 
     public function delete($id, $soapClient);
     

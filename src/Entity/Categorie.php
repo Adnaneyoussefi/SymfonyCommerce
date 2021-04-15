@@ -46,7 +46,7 @@ class Categorie
     /**
      * @return Collection|Produit[]
      */
-    public function getProduits(): Collection
+    public function getProduits(): array
     {
         return $this->produits;
     }

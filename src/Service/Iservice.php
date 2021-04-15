@@ -8,9 +8,9 @@ interface Iservice {
 
     public function getModelById($id);
 
-    public function addModel();
+    public function addModel($obj);
 
-    public function updateModelById($id);
+    public function updateModelById($id, $obj);
 
     public function deleteModelById($id);
     

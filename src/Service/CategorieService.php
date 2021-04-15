@@ -24,24 +24,22 @@ class CategorieService implements RessourceInterface {
         return $categoriesObject;
     }
 
-    public function delete($get,$soapClient): void {
-            try {
-                $categories = $soapClient->deleteCategorie($get);
-              
-            } catch (Exception $e) {
-                
-            }
+    public function delete($get, $soapClient) {
+        return $soapClient->deleteCategorie($get);
     }
 
     public function get($id, $soapClient) {
-       
+        $c = array_filter($this->getCategories($soapClient), function($x) use($id) {
+            return $x->getId() == $id;
+        });
+        return [...$c][0];
     }
 
-    public function add() {
-
+    public function add($obj, $soapClient) {
+        return $soapClient->addNewCategorie($obj->getNom());
     }
 
-    public function update($id, $soapClient) {
-        
+    public function update($id, $obj, $soapClient) {
+        return $soapClient->updateCategorie($id, $obj->getNom());
     }
 }

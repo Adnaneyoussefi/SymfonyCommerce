@@ -41,11 +41,13 @@ class CommerceAPI implements Iservice {
         return $this->ressourceInterface->delete($id, $soapClient);
     }
 
-    public function addModel() {
-       
+    public function addModel($obj) {
+        $soapClient = new \SoapClient($this->api_commerce);
+        return $this->ressourceInterface->add($obj, $soapClient);
     }
 
-    public function updateModelById($id) {
-       
+    public function updateModelById($id, $obj) {
+        $soapClient = new \SoapClient($this->api_commerce);
+        return $this->ressourceInterface->update($id, $obj, $soapClient);
     }
 }

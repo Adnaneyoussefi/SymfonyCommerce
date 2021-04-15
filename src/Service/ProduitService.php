@@ -57,11 +57,11 @@ class ProduitService implements RessourceInterface {
         return $soapClient->deleteProduit($id);
     }
 
-    public function add() {
+    public function add($obj, $soapClient) {
 
     }
 
-    public function update($id, $soapClient) {
+    public function update($id, $obj, $soapClient) {
         
     }
 }

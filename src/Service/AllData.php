@@ -30,12 +30,12 @@ class AllData {
         return $this->service->getModelById($id);
     }
 
-    public function addData() {
-        return $this->service->addModel();
+    public function addData($obj) {
+        return $this->service->addModel($obj);
     }
 
-    public function updateDataById($id) {
-        return $this->service->updateModelById($id);
+    public function updateDataById($id, $obj) {
+        return $this->service->updateModelById($id, $obj);
     }
 
     public function deleteDataById($id) {

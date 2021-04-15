@@ -15,10 +15,10 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produits", name="produits")
      */
-    public function index(AllData $commerce): Response
+    public function index(AllData $commerceProduit): Response
     {
         //dd($commerce->getAllData()["produit"]);
-        $produits = $commerce->getAllData()["produit"];
+        $produits = $commerceProduit->getAllData()["produit"];
         return $this->render('produit/index.html.twig', [
             'produits' => array_reverse($produits)
         ]);
@@ -27,7 +27,7 @@ class ProduitController extends AbstractController
      /**
      * @Route("/produits/new", name="produit_new")
      */
-    public function new(AllData $commerce, Request $request): Response
+    public function new(AllData $commerceProduit, Request $request): Response
     {
         $produit = new Produit();
         $form = $this->createForm(ProduitType::class, $produit);
@@ -52,10 +52,10 @@ class ProduitController extends AbstractController
    /**
      * @Route("/produits/{id}", name="produit_edit", methods={"GET","POST"})
      */
-    public function edit(AllData $commerce, Request $request, $id): Response
+    public function edit(AllData $commerceProduit, Request $request, $id): Response
     {
         //$repos = $this->getDoctrine()->getRepository(Produit::class)->findOneBy(['id' => $produit->getId()]);
-        $repos = $commerce->getDataById($id);
+        $repos = $commerceProduit->getDataById($id);
         $form = $this->createForm(ProduitType::class, $repos);
         $form->handleRequest($request);
 
@@ -77,9 +77,9 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produit/{id}", name="produit_delete")
      */
-    public function delete(AllData $commerce, Request $request, $id): Response
+    public function delete(AllData $commerceProduit, Request $request, $id): Response
     {
-        $commerce->deleteDataById($id);
+        $commerceProduit->deleteDataById($id);
         $this->addFlash('alert', 'Le produit a été supprimé');
 
         return $this->redirectToRoute('produits');
