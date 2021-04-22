@@ -1,20 +1,39 @@
+
 <div class="container mt-5">
-	<form name="produit" method="post">
+	<form name="form" method="post">
 		<div class="form-group">
 			<label for="nom">Nom</label>
-			<input value="{{ produit.nom|default('') }}" name="nom" type="text" class="form-control" id="nom" aria-describedby="nom" placeholder="Entrez nom">
+			<input value="{{ produit.nom|default('') }}" name="nom" type="text" class="form-control"  aria-describedby="nom" placeholder="Entrez nom">
+		<div class="alert alert-danger collapse" id="nom">
+			Remplir le nom
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="description">Description</label>
 			<input value="{{ produit.description|default('') }}" name="description" type="text" class="form-control" id="description" placeholder="Description">
+			<div class="alert alert-danger collapse" id="desc">
+			Remplir la description
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="prix">Prix</label>
-			<input value="{{ produit.prix|default('') }}" name="prix" type="text" class="form-control" id="prix" placeholder="Prix">
+			<input value="{{ produit.prix|default('') }}" name="prix" type="text" class="form-control"  placeholder="Prix">
+		<div class="alert alert-danger collapse" id="prix">
+			Remplir le prix
+		</div>
+		<div class="alert alert-danger collapse" id="prixNot">
+		Prix  doit  etre un entier
+		</div>
 		</div>
 		<div class="form-group">
 			<label for="quantite">Quantité</label>
-			<input value="{{ produit.quantite|default('') }}" name="quantite" type="text" class="form-control" id="quantite" placeholder="Quantité">
+			<input value="{{ produit.quantite|default('') }}" name="quantite" type="text" class="form-control" placeholder="Quantité">
+			<div class="alert alert-danger collapse" id="quantite">
+			Remplir la quantite
+			</div>
+			<div class="alert alert-danger collapse" id="quantiteNot">
+			Quantite  doit  etre un entier
+			</div>
 		</div>
 		<div class="form-group">
 			<select name="categorie" class="custom-select">
@@ -24,7 +43,7 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<button name="{{ button_label|default('Ajouter') }}" class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
+			<button id="id" name="{{ button_label|default('Ajouter') }}" class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
             <a href="{{ path('produits') }}" class="btn btn-outline-success">Retour à la liste</a>
 		</div>
 	</form>

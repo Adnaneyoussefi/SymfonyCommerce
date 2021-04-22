@@ -84,7 +84,7 @@ class CategorieController extends AbstractController{
         }
         else {
             $this->addFlash('warning', 'Attention la categorie est associée à un produit !!');
-        }       
+        }
         return $this->redirectToRoute('categories');
     }
 

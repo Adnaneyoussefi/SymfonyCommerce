@@ -36,6 +36,7 @@ class CategorieService implements RessourceInterface {
     }
 
     public function add($obj, $soapClient) {
+        if($obj->getNom() != "")
         return $soapClient->addNewCategorie($obj->getNom());
     }
 
