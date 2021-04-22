@@ -41,6 +41,7 @@ class CategorieService implements RessourceInterface {
     }
 
     public function update($id, $obj, $soapClient) {
+        if($obj->getNom() != "" && is_numeric($id) == 1)
         return $soapClient->updateCategorie($id, $obj->getNom());
     }
 }
