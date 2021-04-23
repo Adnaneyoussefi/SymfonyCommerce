@@ -5,11 +5,14 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
+    app.bouchonne: 'on'
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $bouchonne: '%app.bouchonne%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -21,18 +24,24 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
+    ressource:
+        class: App\Service\Ressource
+        arguments:
+            $bouchonne: '%app.bouchonne%' 
+
+
     # ajouter le service de CountryAPI
     commerce.produit:
         class: App\Service\CommerceAPI
         arguments:
             $api_commerce: '%app.api_commerce%' 
-            $ressourceInterface: '@App\Service\ProduitService'
+            $ressource: '@App\Service\ProduitService'
         
     commerce.categorie:
         class: App\Service\CommerceAPI
         arguments:
             $api_commerce: '%app.api_commerce%' 
-            $ressourceInterface: '@App\Service\CategorieService'        
+            $ressource: '@App\Service\CategorieService'        
 
     App\Service\CommerceAPI: '@commerce.produit'
     App\Service\CommerceAPI $c: '@commerce.categorie'      

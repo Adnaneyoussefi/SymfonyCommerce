@@ -4,11 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Produit;
 use App\Service\AllData;
-use App\Form\ProduitType;
+use App\Entity\Categorie;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 
 class ProduitController extends AbstractController
 {
@@ -17,20 +25,27 @@ class ProduitController extends AbstractController
      */
     public function index(AllData $commerceProduit): Response
     {
-        //dd($commerce->getAllData()["produit"]);
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizer = [new ObjectNormalizer($classMetadataFactory)];
+        $serializer = new Serializer($normalizer, $encoders);
+
         $produits = $commerceProduit->getAllData()["produit"];
+        $data = $serializer->serialize($produits, 'xml', ['groups' => ['produit', 'categorie']]);
+        $filesystem = new Filesystem();
+        $filesystem->dumpFile('produits.xml', $data);
+
         return $this->render('produit/index.html.twig', [
-            'produits' => array_reverse($produits)
+            'produits' => array_reverse($produits),
         ]);
     }
 
-     /**
+    /**
      * @Route("/produits/new", name="produit_new")
      */
-    public function new(AllData $commerceProduit, AllData $commerceCategorie, Request $request): Response
-    {
+    function new (AllData $commerceProduit, AllData $commerceCategorie, Request $request): Response {
         $categories = $commerceCategorie->getAllData()["categorie"];
-        if(isset($_POST['Ajouter'])) {
+        if (isset($_POST['Ajouter'])) {
             $commerceProduit->addData($_POST);
             $this->addFlash('success', 'Vous avez ajouter le produit avec succées !');
             return $this->redirectToRoute('produits');
@@ -40,7 +55,7 @@ class ProduitController extends AbstractController
         ]);
     }
 
-   /**
+    /**
      * @Route("/produits/{id}/edit", name="produit_edit", methods={"GET","POST"})
      */
     public function edit(AllData $commerceProduit, AllData $commerceCategorie, Request $request, $id): Response
@@ -48,7 +63,7 @@ class ProduitController extends AbstractController
         $repos = $commerceProduit->getDataById($id);
         $categories = $commerceCategorie->getAllData()["categorie"];
 
-        if(isset($_POST['Modifier'])) {
+        if (isset($_POST['Modifier'])) {
             $commerceProduit->updateDataById($id, $_POST);
             $this->addFlash('success', 'Vous avez modifié le produit avec succées !');
             return $this->redirectToRoute('produits');
@@ -56,7 +71,7 @@ class ProduitController extends AbstractController
 
         return $this->render('produit/edit.html.twig', [
             'produit' => $repos,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -69,5 +84,54 @@ class ProduitController extends AbstractController
         $this->addFlash('alert', 'Le produit a été supprimé');
 
         return $this->redirectToRoute('produits');
+    }
+
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test(AllData $commerceCategorie, AllData $commerceProduit)
+    {
+        $path_produits = "../src/Bouchonné/getListProduits.xml";
+        $path_categories = "../src/Bouchonné/getListCategories.xml";
+
+        $soapClient = new \SoapClient('http://127.0.0.1:8000/soap?wsdl');
+
+        $produits_soap = $soapClient->getListProduits();
+        $categories_soap = $soapClient->getListCategories();
+
+
+        $produits = $this->convertResponseXML($path_produits);
+        $categories = $this->convertResponseXML($path_categories);
+
+        ///////////////
+        $categoriesObject = [];
+        foreach ($categories as $c) {
+            $categorie = new Categorie();
+            $categorie->setId((int)$c->id)
+                ->setNom($c->nom);
+            foreach(is_array($c->produits->item) ? $c->produits->item : [$c->produits->item]  as $p) {
+                $produit = new Produit();
+                $produit->setId((int)$p->id)
+                        ->setNom($p->nom)
+                        ->setDescription($p->description)
+                        ->setPrix($p->prix)
+                        ->setImage("")
+                        ->setQuantite($p->quantite)
+                        ->setCategorie($categorie);
+                $categorie->addProduit($produit);
+            }
+            array_push($categoriesObject, $categorie);
+        }
+        
+        dd($categoriesObject, $produits, $produits_soap, $categories, $categories_soap);
+    }
+    public function convertResponseXML($path_xml)
+    {
+        $xml = file_get_contents($path_xml);
+        //$xml = preg_replace('#[a-zA-Z0-9]+="[\#a-zA-Z0-9]+"#', '', $xml);
+        $xml = simplexml_load_string($xml);
+        $data = $xml->xpath("//SOAP-ENV:Body/*/*")[0];
+        $arrayResult = json_decode(json_encode($data));
+        return $arrayResult->item;
     }
 }

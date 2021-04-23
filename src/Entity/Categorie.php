@@ -5,13 +5,23 @@ namespace App\Entity;
 use App\Entity\Produit;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 class Categorie
 {
+    /**
+     * @Groups("categorie")
+     */
     private $id;
 
+    /**
+     * @Groups("categorie")
+     */
     private $nom;
-
+    
+    /**
+     * @Groups("produits")
+     */
     private $produits;
 
     public function __construct()
@@ -46,7 +56,7 @@ class Categorie
     /**
      * @return Collection|Produit[]
      */
-    public function getProduits(): array
+    public function getProduits()
     {
         return $this->produits;
     }

@@ -2,15 +2,21 @@
 
 namespace App\Controller;
 
-use CategorieService;
 use App\Service\AllData;
 use App\Entity\Categorie;
 use App\Form\CategorieType;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 
 class CategorieController extends AbstractController{
 
@@ -19,10 +25,9 @@ class CategorieController extends AbstractController{
      */
     public function index(AllData $commerceCategorie): Response
     {
-        //dd($commerceCategorie->getDataById(2));
-
+        $categories = $commerceCategorie->getAllData();
         return $this->render('categorie/index.html.twig', [
-            'categories' => $commerceCategorie->getAllData()["categorie"]
+            'categories' => $categories
         ]);
     }
 
@@ -36,7 +41,6 @@ class CategorieController extends AbstractController{
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($form->getNormData());
             $commerceCategorie->addData($form->getNormData());
             $this->addFlash('success', 'Vous avez ajouter la catégorie avec succées !');
             return $this->redirectToRoute('categories');
@@ -53,14 +57,12 @@ class CategorieController extends AbstractController{
      */
     public function edit(AllData $commerceCategorie, Request $request, $id): Response
     {
-        //$repos = $this->getDoctrine()->getRepository(Produit::class)->findOneBy(['id' => $produit->getId()]);
         $repos = $commerceCategorie->getDataById($id);
         $form = $this->createForm(CategorieType::class, $repos);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $commerceCategorie->updateDataById($id, $form->getNormData());
-            //$this->getDoctrine()->getManager()->flush();
             $this->addFlash('warning', 'La catégorie est bien modifié!');
 
             return $this->redirectToRoute('categories');
@@ -75,7 +77,7 @@ class CategorieController extends AbstractController{
     /**
      * @Route("/categories/{id}", name="categorie_delete")
      */
-    public function delete(AllData $commerceCategorie, Request $request, $id): Response
+    public function delete(AllData $commerceCategorie, $id): Response
     {
         $categorie = $commerceCategorie->getDataById($id);
         if(count($categorie->getProduits()) == 0) {
@@ -87,5 +89,4 @@ class CategorieController extends AbstractController{
         }       
         return $this->redirectToRoute('categories');
     }
-
 }

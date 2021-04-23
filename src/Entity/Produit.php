@@ -3,23 +3,43 @@
 namespace App\Entity;
 
 use App\Entity\Categorie;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 class Produit
 {
+    /**
+     * @Groups("produit")
+     */
     private $id;
 
+    /**
+     * @Groups("produit")
+     */
     private $nom;
 
+    /**
+     * @Groups("produit")
+     */
     private $description;
 
+    /**
+     * @Groups("produit")
+     */
     private $prix;
 
+    /**
+     * @Groups("produit")
+     */
     private $image;
 
+    /**
+     * @Groups("produit")
+     */
     private $quantite;
 
+    /**
+     * @Groups("categorie")
+     */
     private $categorie;
 
     public function getId(): ?int

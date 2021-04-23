@@ -2,44 +2,73 @@
 
 namespace App\Service;
 
+use App\Entity\Produit;
 use App\Entity\Categorie;
-use App\Service\RessourceInterface;
+use App\Service\Ressource;
 
-class CategorieService implements RessourceInterface {
+class CategorieService extends Ressource
+{
 
     /**
      * @return Categorie[]
      */
-    public function getCategories($soapClient): array {
+    public function getList($soapClient): array
+    {
         $categoriesObject = [];
-        $categories = $soapClient->getListCategories();
+        $categories = [];
+        if($this->bouchonne == 'on') {
+            $path_xml = "../src/Bouchonné/getListCategories.xml";
+            $categories = $this->convertResponseXML($path_xml);
+        }
+        else
+            $categories = $soapClient->getListCategories();
 
-        foreach($categories as $c) {
+        foreach ($categories as $c) {
             $categorie = new Categorie();
-            $categorie->setId($c->id)
-                      ->setNom($c->nom)
-                      ->setProduits($c->produits);
+            $categorie->setId((int)$c->id)
+                ->setNom($c->nom);
+                $produits = [];
+                if(isset($c->produits->item)) {
+                    $produits = is_array($c->produits->item) ? $c->produits->item : [$c->produits->item];
+                }
+                else
+                    $produits = $c->produits;
+            foreach($produits as $p) {
+                $produit = new Produit();
+                $produit->setId((int)$p->id)
+                        ->setNom($p->nom)
+                        ->setDescription($p->description)
+                        ->setPrix($p->prix)
+                        ->setImage("")
+                        ->setQuantite($p->quantite)
+                        ->setCategorie($categorie);
+                $categorie->addProduit($produit);
+            }
             array_push($categoriesObject, $categorie);
         }
         return $categoriesObject;
     }
 
-    public function delete($get, $soapClient) {
+    public function delete($get, $soapClient)
+    {
         return $soapClient->deleteCategorie($get);
     }
 
-    public function get($id, $soapClient) {
-        $c = array_filter($this->getCategories($soapClient), function($x) use($id) {
+    public function get($id, $soapClient)
+    {
+        $c = array_filter($this->getCategories($soapClient), function ($x) use ($id) {
             return $x->getId() == $id;
         });
         return [...$c][0];
     }
 
-    public function add($obj, $soapClient) {
+    public function add($obj, $soapClient)
+    {
         return $soapClient->addNewCategorie($obj->getNom());
     }
 
-    public function update($id, $obj, $soapClient) {
+    public function update($id, $obj, $soapClient)
+    {
         return $soapClient->updateCategorie($id, $obj->getNom());
     }
 }

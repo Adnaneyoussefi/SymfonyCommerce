@@ -4,14 +4,14 @@ namespace App\Service;
 
 use App\Entity\Produit;
 use App\Entity\Categorie;
-use App\Service\RessourceInterface;
+use App\Service\Ressource;
 
-class ProduitService implements RessourceInterface {
+class ProduitService extends Ressource {
 
     /**
      * @return Produit[]
      */
-    public function getProduits($soapClient): array {
+    public function getList($soapClient): array {
         $categories = $soapClient->getListCategories();
         $produits = $soapClient->getListProduits();
         $produitsObject = [];
