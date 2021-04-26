@@ -25,16 +25,7 @@ class ProduitController extends AbstractController
      */
     public function index(AllData $commerceProduit): Response
     {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizer = [new ObjectNormalizer($classMetadataFactory)];
-        $serializer = new Serializer($normalizer, $encoders);
-
-        $produits = $commerceProduit->getAllData()["produit"];
-        $data = $serializer->serialize($produits, 'xml', ['groups' => ['produit', 'categorie']]);
-        $filesystem = new Filesystem();
-        $filesystem->dumpFile('produits.xml', $data);
-
+        $produits = $commerceProduit->getAllData();
         return $this->render('produit/index.html.twig', [
             'produits' => array_reverse($produits),
         ]);
@@ -44,7 +35,7 @@ class ProduitController extends AbstractController
      * @Route("/produits/new", name="produit_new")
      */
     function new (AllData $commerceProduit, AllData $commerceCategorie, Request $request): Response {
-        $categories = $commerceCategorie->getAllData()["categorie"];
+        $categories = $commerceCategorie->getAllData();
         if (isset($_POST['Ajouter'])) {
             $commerceProduit->addData($_POST);
             $this->addFlash('success', 'Vous avez ajouter le produit avec succées !');
@@ -61,7 +52,7 @@ class ProduitController extends AbstractController
     public function edit(AllData $commerceProduit, AllData $commerceCategorie, Request $request, $id): Response
     {
         $repos = $commerceProduit->getDataById($id);
-        $categories = $commerceCategorie->getAllData()["categorie"];
+        $categories = $commerceCategorie->getAllData();
 
         if (isset($_POST['Modifier'])) {
             $commerceProduit->updateDataById($id, $_POST);
@@ -115,7 +106,7 @@ class ProduitController extends AbstractController
                         ->setNom($p->nom)
                         ->setDescription($p->description)
                         ->setPrix($p->prix)
-                        ->setImage("")
+                        ->setImage('')
                         ->setQuantite($p->quantite)
                         ->setCategorie($categorie);
                 $categorie->addProduit($produit);

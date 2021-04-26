@@ -39,7 +39,7 @@ class CategorieService extends Ressource
                         ->setNom($p->nom)
                         ->setDescription($p->description)
                         ->setPrix($p->prix)
-                        ->setImage("")
+                        ->setImage($p->image)
                         ->setQuantite($p->quantite)
                         ->setCategorie($categorie);
                 $categorie->addProduit($produit);
@@ -56,7 +56,7 @@ class CategorieService extends Ressource
 
     public function get($id, $soapClient)
     {
-        $c = array_filter($this->getCategories($soapClient), function ($x) use ($id) {
+        $c = array_filter($this->getList($soapClient), function ($x) use ($id) {
             return $x->getId() == $id;
         });
         return [...$c][0];

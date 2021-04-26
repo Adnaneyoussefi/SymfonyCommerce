@@ -2,13 +2,13 @@
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="urn:commerceservicewsdl" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
     <SOAP-ENV:Body>
         <ns1:getListProduitsResponse>
-            <return SOAP-ENC:arrayType="ns1:Produit[4]" xsi:type="ns1:ListeProduits">
+            <return SOAP-ENC:arrayType="ns1:Produit[3]" xsi:type="ns1:ListeProduits">
                 <item xsi:type="ns1:Produit">
                     <id xsi:type="xsd:int">19</id>
                     <nom xsi:type="xsd:string">Sumsung Galaxy A02S</nom>
                     <description xsi:type="xsd:string">4GB RAM 60GB</description>
                     <prix xsi:type="xsd:float">1400</prix>
-                    <image xsi:type="xsd:string">https://evotrading.ma/wp-content/uploads/2021/02/smartphone-samsung-galaxy-a02s-4gb-64go-rouge-sm-a025fzrfmwd.png</image>
+                    <image xsi:type="xsd:string">https://images.frandroid.com/wp-content/uploads/2021/01/samsung-galaxy-a02s-frandroid-2021.png</image>
                     <quantite xsi:type="xsd:int">32</quantite>
                     <categorie xsi:type="xsd:Categorie">
                         <__initializer__ xsi:type="SOAP-ENC:Struct" id="ref1"/>
@@ -42,7 +42,7 @@
                     <prix xsi:type="xsd:float">3220</prix>
                     <image xsi:type="xsd:string">https://evotrading.ma/wp-content/uploads/2021/01/pc-portable-dell-latitude-3410-i3-10110u-4gb-1to-n001l341014emea.png</image>
                     <quantite xsi:type="xsd:int">41</quantite>
-                    <categorie xsi:type="xsd:Categorie" id="ref3">
+                    <categorie xsi:type="xsd:Categorie">
                         <__initializer__ href="#ref1"/>
                         <__cloner__ href="#ref2"/>
                         <__isInitialized__ xsi:type="xsd:boolean">false</__isInitialized__>
@@ -50,15 +50,6 @@
                         <nom xsi:nil="true"/>
                         <produits xsi:nil="true"/>
                     </categorie>
-                </item>
-                <item xsi:type="ns1:Produit">
-                    <id xsi:type="xsd:int">45</id>
-                    <nom xsi:type="xsd:string">Dell</nom>
-                    <description xsi:type="xsd:string">I7 7Ã¨me gÃ©nÃ©ration 8GB RAM 500GB</description>
-                    <prix xsi:type="xsd:float">4500</prix>
-                    <image xsi:type="xsd:string"></image>
-                    <quantite xsi:type="xsd:int">65</quantite>
-                    <categorie href="#ref3" xsi:type="xsd:Categorie"/>
                 </item>
             </return>
         </ns1:getListProduitsResponse>

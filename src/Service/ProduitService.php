@@ -12,8 +12,20 @@ class ProduitService extends Ressource {
      * @return Produit[]
      */
     public function getList($soapClient): array {
-        $categories = $soapClient->getListCategories();
-        $produits = $soapClient->getListProduits();
+        $produits = [];
+        $categories = [];
+
+        if($this->bouchonne == 'on') {
+            $path_xml1 = "../src/Bouchonné/getListProduits.xml";
+            $path_xml2 = "../src/Bouchonné/getListCategories.xml";
+            $produits = $this->convertResponseXML($path_xml1);
+            $categories = $this->convertResponseXML($path_xml2);
+        }
+        else {
+            $categories = $soapClient->getListCategories();
+            $produits = $soapClient->getListProduits();
+        }
+
         $produitsObject = [];
         $categoriesObject = [];
 
@@ -33,13 +45,14 @@ class ProduitService extends Ressource {
                     ->setQuantite($p->quantite);
             
             foreach($categoriesObject as $ca) {
-                if($p->categorie->id === $ca->getId()) {
+                if($p->categorie->id == $ca->getId()) {
                     $ca->addProduit($produit);  
                     $produit->setCategorie($ca);
                 }
             }
             array_push($produitsObject, $produit);
         }
+        dump($produitsObject, $categoriesObject);
         return $produitsObject;
     }
 
@@ -47,7 +60,7 @@ class ProduitService extends Ressource {
      * @return Produit[]
      */
     public function get($id, $soapClient) {
-        $p = array_filter($this->getProduits($soapClient), function($x) use($id) {
+        $p = array_filter($this->getList($soapClient), function($x) use($id) {
             return $x->getId() == $id;
         });
         return [...$p][0];
