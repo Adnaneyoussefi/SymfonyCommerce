@@ -62,13 +62,13 @@ class CategorieService extends Ressource
         return [...$c][0];
     }
 
-    public function add($obj, $soapClient)
-    {
-        return $soapClient->addNewCategorie($obj->getNom());
+    public function add($obj, $soapClient) {
+        if($obj->getNom() != "")
+            return $soapClient->addNewCategorie($obj->getNom());
     }
 
-    public function update($id, $obj, $soapClient)
-    {
-        return $soapClient->updateCategorie($id, $obj->getNom());
+    public function update($id, $obj, $soapClient) {
+        if($obj->getNom() != "" && is_numeric($id) == 1)
+            return $soapClient->updateCategorie($id, $obj->getNom());
     }
 }

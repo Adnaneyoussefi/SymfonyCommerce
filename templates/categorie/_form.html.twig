@@ -1,7 +1,10 @@
-{{ form_start(form) }}
-    
-    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom de la catégorie"}}) }}
-    <button class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
+{{ form_start(form, {'attr': {'id': 'form'}}) }}
+
+    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom de la catégorie",'name' : "nom"}}) }}
+    <div class="alert alert-danger collapse" id="catN">
+    Remplir categorie
+    </div>
+    <button id="ajouter" class="btn {{ btn_type|default('btn-primary') }}">{{ button_label|default('Ajouter') }}</button>
     <a href="{{ path('categories') }}" class="btn btn-outline-success">Retour à la liste</a>
-    
+
 {{ form_end(form) }}
