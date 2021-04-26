@@ -28,5 +28,4 @@ abstract class Ressource {
         $arrayResult = json_decode(json_encode($data));
         return $arrayResult->item;
     }
-    
 }
