@@ -10,32 +10,32 @@ class Produit
     /**
      * @Groups("produit")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Groups("produit")
      */
-    private $nom;
+    private string $nom;
 
     /**
      * @Groups("produit")
      */
-    private $description;
+    private string $description;
 
     /**
      * @Groups("produit")
      */
-    private $prix;
+    private float $prix;
 
     /**
      * @Groups("produit")
      */
-    private $image;
+    private string $image;
 
     /**
      * @Groups("produit")
      */
-    private $quantite;
+    private int $quantite;
 
     /**
      * @Groups("categorie")

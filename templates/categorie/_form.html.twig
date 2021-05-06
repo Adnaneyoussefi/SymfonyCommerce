@@ -1,6 +1,6 @@
 {{ form_start(form, {'attr': {'id': 'form'}}) }}
 
-    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom de la catégorie",'name' : "nom"}}) }}
+    {{ form_row(form.nom,  {'label_attr': {'class': 'text-black'}, 'attr' : {'placeholder' : "Nom de la catégorie",'required' : "true"}}) }}
     <div class="alert alert-danger collapse" id="catN">
     Remplir categorie
     </div>

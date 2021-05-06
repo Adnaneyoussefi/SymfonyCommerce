@@ -48,12 +48,26 @@ class CategorieService extends Ressource
         }
         return $categoriesObject;
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  mixed $get
+     * @param  mixed $soapClient
+     * @return void
+     */
     public function delete($get, $soapClient)
     {
         return $soapClient->deleteCategorie($get);
     }
-
+    
+    /**
+     * get
+     *
+     * @param  mixed $id
+     * @param  mixed $soapClient
+     * @return void
+     */
     public function get($id, $soapClient)
     {
         $c = array_filter($this->getList($soapClient), function ($x) use ($id) {
@@ -61,12 +75,27 @@ class CategorieService extends Ressource
         });
         return [...$c][0];
     }
-
+    
+    /**
+     * add
+     *
+     * @param  mixed $obj
+     * @param  mixed $soapClient
+     * @return void
+     */
     public function add($obj, $soapClient) {
         if($obj->getNom() != "")
             return $soapClient->addNewCategorie($obj->getNom());
     }
-
+    
+    /**
+     * update
+     *
+     * @param  mixed $id
+     * @param  mixed $obj
+     * @param  mixed $soapClient
+     * @return void
+     */
     public function update($id, $obj, $soapClient) {
         if($obj->getNom() != "" && is_numeric($id) == 1)
             return $soapClient->updateCategorie($id, $obj->getNom());

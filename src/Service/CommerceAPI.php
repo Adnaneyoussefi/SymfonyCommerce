@@ -21,26 +21,56 @@ class CommerceAPI implements Iservice {
         $this->ressource = $ressource;
     }
 
+    /**
+     * getModels
+     *
+     * @return array
+     */
     public function getModels(): array {
         $soapClient = new \SoapClient($this->api_commerce);
         return $this->ressource->getList($soapClient);
     }
 
+    /**
+     * getModelById
+     *
+     * @param  int $id
+     * @return void
+     */
     public function getModelById($id) {
         $soapClient = new \SoapClient($this->api_commerce);
         return $this->ressource->get($id, $soapClient);
     }
-
+    
+    /**
+     * deleteModelById
+     *
+     * @param  int $id
+     * @return void
+     */
     public function deleteModelById($id) {
         $soapClient = new \SoapClient($this->api_commerce);
         return $this->ressource->delete($id, $soapClient);
     }
-
+    
+    /**
+     * addModel
+     *
+     * @param  mixed $obj
+     * @return void
+     */
     public function addModel($obj) {
         $soapClient = new \SoapClient($this->api_commerce);
         return $this->ressource->add($obj, $soapClient);
     }
-
+    
+    /**
+     * updateModelById
+     *
+     * @param  mixed $id
+     * @param  mixed $obj
+     * @return void
+     */
     public function updateModelById($id, $obj) {
         $soapClient = new \SoapClient($this->api_commerce);
         return $this->ressource->update($id, $obj, $soapClient);

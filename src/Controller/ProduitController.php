@@ -36,7 +36,7 @@ class ProduitController extends AbstractController
      */
     function new (AllData $commerceProduit, AllData $commerceCategorie, Request $request): Response {
         $categories = $commerceCategorie->getAllData();
-        if (isset($_POST['Ajouter'])) {
+        if ($request->isMethod('POST')) {
             $commerceProduit->addData($_POST);
             $this->addFlash('success', 'Vous avez ajouter le produit avec succées !');
             return $this->redirectToRoute('produits');
@@ -54,7 +54,7 @@ class ProduitController extends AbstractController
         $repos = $commerceProduit->getDataById($id);
         $categories = $commerceCategorie->getAllData();
 
-        if (isset($_POST['Modifier'])) {
+        if ($request->isMethod('POST')) {
             $commerceProduit->updateDataById($id, $_POST);
             $this->addFlash('success', 'Vous avez modifié le produit avec succées !');
             return $this->redirectToRoute('produits');

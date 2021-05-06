@@ -8,7 +8,7 @@ abstract class Ressource {
     {
         $this->bouchonne = $bouchonne;
     }
-    
+
     abstract public function getList($soapClient);
 
     abstract public function get($id, $soapClient);
@@ -28,5 +28,5 @@ abstract class Ressource {
         $arrayResult = json_decode(json_encode($data));
         return $arrayResult->item;
     }
-    
+
 }

@@ -2,26 +2,27 @@
 
 namespace App\Service;
 
-use App\Entity\Produit;
 use App\Entity\Categorie;
+use App\Entity\Produit;
 use App\Service\Ressource;
 
-class ProduitService extends Ressource {
+class ProduitService extends Ressource
+{
 
     /**
      * @return Produit[]
      */
-    public function getList($soapClient): array {
+    public function getList($soapClient): array
+    {
         $produits = [];
         $categories = [];
 
-        if($this->bouchonne == 'on') {
+        if ($this->bouchonne == 'on') {
             $path_xml1 = "../src/Bouchonné/getListProduits.xml";
             $path_xml2 = "../src/Bouchonné/getListCategories.xml";
             $produits = $this->convertResponseXML($path_xml1);
             $categories = $this->convertResponseXML($path_xml2);
-        }
-        else {
+        } else {
             $categories = $soapClient->getListCategories();
             $produits = $soapClient->getListProduits();
         }
@@ -29,24 +30,24 @@ class ProduitService extends Ressource {
         $produitsObject = [];
         $categoriesObject = [];
 
-        foreach($categories as $c) {
+        foreach ($categories as $c) {
             $categorie = new Categorie();
             $categorie->setId($c->id)
-                      ->setNom($c->nom);
-            array_push($categoriesObject, $categorie);           
+                ->setNom($c->nom);
+            array_push($categoriesObject, $categorie);
         }
-        foreach($produits as $p) {
+        foreach ($produits as $p) {
             $produit = new Produit();
             $produit->setId($p->id)
-                    ->setNom($p->nom)
-                    ->setDescription($p->description)
-                    ->setPrix($p->prix)
-                    ->setImage($p->image)
-                    ->setQuantite($p->quantite);
-            
-            foreach($categoriesObject as $ca) {
-                if($p->categorie->id == $ca->getId()) {
-                    $ca->addProduit($produit);  
+                ->setNom($p->nom)
+                ->setDescription($p->description)
+                ->setPrix($p->prix)
+                ->setImage($p->image)
+                ->setQuantite($p->quantite);
+
+            foreach ($categoriesObject as $ca) {
+                if ($p->categorie->id == $ca->getId()) {
+                    $ca->addProduit($produit);
                     $produit->setCategorie($ca);
                 }
             }
@@ -59,24 +60,28 @@ class ProduitService extends Ressource {
     /**
      * @return Produit[]
      */
-    public function get($id, $soapClient) {
-        $p = array_filter($this->getList($soapClient), function($x) use($id) {
+    public function get($id, $soapClient)
+    {
+        $p = array_filter($this->getList($soapClient), function ($x) use ($id) {
             return $x->getId() == $id;
         });
         return [...$p][0];
     }
 
-    public function delete($id, $soapClient) {
+    public function delete($id, $soapClient)
+    {
         return $soapClient->deleteProduit($id);
     }
 
-    public function add($obj, $soapClient) {
+    public function add($obj, $soapClient)
+    {
         return $soapClient->addNewProduit($obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
-        $obj['categorie']);
+            $obj['categorie']);
     }
 
-    public function update($id, $obj, $soapClient) {
+    public function update($id, $obj, $soapClient)
+    {
         return $soapClient->updateProduit($id, $obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
-        $obj['categorie']);
+            $obj['categorie']);
     }
 }
