@@ -15,10 +15,13 @@ class CommerceAPI implements Iservice {
 
     private $api_commerce;
 
+    private $soapClient;
+
     public function __construct(string $api_commerce, Ressource $ressource)
     {
         $this->api_commerce = $api_commerce;
         $this->ressource = $ressource;
+        $this->soapClient = new \SoapClient($api_commerce);
     }
 
     /**
@@ -27,8 +30,7 @@ class CommerceAPI implements Iservice {
      * @return array
      */
     public function getModels(): array {
-        $soapClient = new \SoapClient($this->api_commerce);
-        return $this->ressource->getList($soapClient);
+        return $this->ressource->getList($this->soapClient);
     }
 
     /**
@@ -38,8 +40,7 @@ class CommerceAPI implements Iservice {
      * @return void
      */
     public function getModelById($id) {
-        $soapClient = new \SoapClient($this->api_commerce);
-        return $this->ressource->get($id, $soapClient);
+        return $this->ressource->get($id, $this->soapClient);
     }
     
     /**
@@ -49,8 +50,7 @@ class CommerceAPI implements Iservice {
      * @return void
      */
     public function deleteModelById($id) {
-        $soapClient = new \SoapClient($this->api_commerce);
-        return $this->ressource->delete($id, $soapClient);
+        return $this->ressource->delete($id, $this->soapClient);
     }
     
     /**
@@ -60,8 +60,7 @@ class CommerceAPI implements Iservice {
      * @return void
      */
     public function addModel($obj) {
-        $soapClient = new \SoapClient($this->api_commerce);
-        return $this->ressource->add($obj, $soapClient);
+        return $this->ressource->add($obj, $this->soapClient);
     }
     
     /**
@@ -72,7 +71,6 @@ class CommerceAPI implements Iservice {
      * @return void
      */
     public function updateModelById($id, $obj) {
-        $soapClient = new \SoapClient($this->api_commerce);
-        return $this->ressource->update($id, $obj, $soapClient);
+        return $this->ressource->update($id, $obj, $this->soapClient);
     }
 }
