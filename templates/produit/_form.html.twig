@@ -3,7 +3,7 @@
 	<form name="form" method="post">
 		<div class="form-group">
 			<label for="nom">Nom</label>
-			<input id="inputNom" value="{{ produit.nom|default('') }}" name="nom" type="text" class="form-control"  aria-describedby="nom" placeholder="Entrez nom" pattern="[a-zA-Z0-9]+" required>
+			<input id="inputNom" value="{{ produit.nom|default('') }}" name="nom" type="text" class="form-control"  aria-describedby="nom" placeholder="Entrez nom" pattern="[a-zA-Z0-9 ]+" required>
 		<div class="alert alert-danger collapse" id="nom">
 			Remplir le nom
 			</div>

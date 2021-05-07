@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
-    bouchon.enabled: false
+    bouchon.enabled: true
     bouchon.active_uc: 'WS_X_CHAMPS_VIDES'
     bouchon.directory: "unit_test/bouchons"
 services:

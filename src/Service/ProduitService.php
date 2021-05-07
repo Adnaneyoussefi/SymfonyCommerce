@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Service\CustomSoapClient;
 use App\Service\RessourceInterface;
@@ -21,9 +22,9 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
      */
     public function getList(): array {
         $this->ws_name = 'getListProduits';
-        $produits = $this->__call('getListProduits', array());
+        $produits = $this->getListProduits();
         $this->ws_name = 'getListCategories';
-        $categories = $this->__call('getListCategories', array());
+        $categories = $this->getListCategories();
 
         $produitsObject = [];
         $categoriesObject = [];
@@ -66,8 +67,8 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
      */
     public function get(int $id) {
         $this->ws_name = 'getProduitById';
-        $response = $this->__call('getProduitById', array($id));
-        $c = $this->__call('getCategorieById', array($response->categorie->id));
+        $response = $this->getProduitById($id);
+        $c = $this->getCategorieById($response->categorie->id);
         $produit = new Produit();
         $produit->setId((int)$response->id)
                 ->setNom($response->nom)
@@ -90,10 +91,10 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
      * @param  object $obj
      * @return object
      */
-    public function add(object $obj) {
+    public function add($obj) {
         $array = [$obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
         $obj['categorie']];
-        $response = $this->__call('addNewProduit', $array);
+        $response = $this->addNewProduit(...$array);
         return $response;
     }
     
@@ -104,10 +105,10 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
      * @param  object $obj
      * @return object
      */
-    public function update(int $id, object $obj) {
+    public function update(int $id, $obj) {
         $array = [$id, $obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
         $obj['categorie']];
-        $response = $this->__call('updateProduit', $array);
+        $response = $this->updateProduit(...$array);
         return $response;
     }
     
@@ -118,7 +119,7 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
      * @return object
      */
     public function delete(int $id) {
-        $response = $this->__call('deleteProduit', array($id));
+        $response = $this->deleteProduit($id);
         return $response;
     }
 }

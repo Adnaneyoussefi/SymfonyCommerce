@@ -95,7 +95,7 @@ class CategorieService extends CustomSoapClient implements RessourceInterface
      * @param  object $obj
      * @return object
      */
-    public function add(object $obj) {
+    public function add($obj) {
         $response = $this->__call('addNewCategorie', array($obj->getNom()));
         return $response;
     }
