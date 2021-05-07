@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Service\CustomSoapClient;
 use App\Service\RessourceInterface;
@@ -15,7 +14,6 @@ class ProduitService extends CustomSoapClient implements RessourceInterface {
         parent::__construct($apikey, $params);
     }
 
-        
     /**
      * Récupérer la liste des produits
      *

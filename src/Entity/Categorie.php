@@ -12,12 +12,12 @@ class Categorie
     /**
      * @Groups("categorie")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Groups("categorie")
      */
-    private $nom;
+    private string $nom;
     
     /**
      * @Groups("produits")
@@ -60,14 +60,26 @@ class Categorie
     {
         return $this->produits;
     }
-
+    
+    /**
+     * setProduits
+     *
+     * @param  array $produits
+     * @return self
+     */
     public function setProduits(array $produits): self
     {
         $this->produits = $produits;
 
         return $this;
     }
-
+    
+    /**
+     * addProduit
+     *
+     * @param  Produit $produit
+     * @return self
+     */
     public function addProduit(Produit $produit): self
     {
         $this->produits[] = $produit;
