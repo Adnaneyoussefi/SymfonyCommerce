@@ -4,79 +4,123 @@ namespace App\Service;
 
 use App\Entity\Produit;
 use App\Entity\Categorie;
-use App\Service\Ressource;
+use App\Service\CustomSoapClient;
+use App\Service\RessourceInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class ProduitService extends Ressource {
+class ProduitService extends CustomSoapClient implements RessourceInterface {
 
+    public function __construct(string $apikey, ParameterBagInterface $params)
+    {   
+        parent::__construct($apikey, $params);
+    }
+
+        
     /**
+     * Récupérer la liste des produits
+     *
      * @return Produit[]
      */
-    public function getList($soapClient): array {
-        $produits = [];
-        $categories = [];
-
-        if($this->bouchonne == 'on') {
-            $path_xml1 = "../src/Bouchonné/getListProduits.xml";
-            $path_xml2 = "../src/Bouchonné/getListCategories.xml";
-            $produits = $this->convertResponseXML($path_xml1);
-            $categories = $this->convertResponseXML($path_xml2);
-        }
-        else {
-            $categories = $soapClient->getListCategories();
-            $produits = $soapClient->getListProduits();
-        }
+    public function getList(): array {
+        $this->ws_name = 'getListProduits';
+        $produits = $this->__call('getListProduits', array());
+        $this->ws_name = 'getListCategories';
+        $categories = $this->__call('getListCategories', array());
 
         $produitsObject = [];
         $categoriesObject = [];
 
-        foreach($categories as $c) {
-            $categorie = new Categorie();
-            $categorie->setId($c->id)
-                      ->setNom($c->nom);
-            array_push($categoriesObject, $categorie);           
-        }
-        foreach($produits as $p) {
-            $produit = new Produit();
-            $produit->setId($p->id)
-                    ->setNom($p->nom)
-                    ->setDescription($p->description)
-                    ->setPrix($p->prix)
-                    ->setImage($p->image)
-                    ->setQuantite($p->quantite);
-            
-            foreach($categoriesObject as $ca) {
-                if($p->categorie->id == $ca->getId()) {
-                    $ca->addProduit($produit);  
-                    $produit->setCategorie($ca);
-                }
+        if(isset($categories) && isset($produits))
+        {
+            foreach($categories as $c) {
+                $categorie = new Categorie();
+                $categorie->setId($c->id)
+                        ->setNom($c->nom);
+                array_push($categoriesObject, $categorie);           
             }
-            array_push($produitsObject, $produit);
+            foreach($produits as $p) {
+                $produit = new Produit();
+                $produit->setId($p->id)
+                        ->setNom($p->nom)
+                        ->setDescription($p->description)
+                        ->setPrix($p->prix)
+                        ->setImage($p->image)
+                        ->setQuantite(intval($p->quantite));
+                
+                foreach($categoriesObject as $ca) {
+                    if($p->categorie->id == $ca->getId()) {
+                        $ca->addProduit($produit);  
+                        $produit->setCategorie($ca);
+                    }
+                }
+                array_push($produitsObject, $produit);
+            }
         }
-        dump($produitsObject, $categoriesObject);
+        dump($produitsObject);
         return $produitsObject;
     }
 
     /**
-     * @return Produit[]
+     * Récupérer le produit par id
+     *
+     * @param  int $id
+     * @return Produit
      */
-    public function get($id, $soapClient) {
-        $p = array_filter($this->getList($soapClient), function($x) use($id) {
-            return $x->getId() == $id;
-        });
-        return [...$p][0];
+    public function get(int $id) {
+        $this->ws_name = 'getProduitById';
+        $response = $this->__call('getProduitById', array($id));
+        $c = $this->__call('getCategorieById', array($response->categorie->id));
+        $produit = new Produit();
+        $produit->setId((int)$response->id)
+                ->setNom($response->nom)
+                ->setDescription($response->description)
+                ->setPrix($response->prix)
+                ->setImage($response->image)
+                ->setQuantite((int)$response->quantite);
+        $categorie = new Categorie();
+        $categorie->setId((int)$c->id)
+                ->setNom($c->nom);
+        if($response->categorie->id == $categorie->getId())
+            $categorie->addProduit($produit);
+            $produit->setCategorie($categorie);
+        return $produit;
     }
-
-    public function delete($id, $soapClient) {
-        return $soapClient->deleteProduit($id);
+    
+    /**
+     * Ajouter un produit
+     *
+     * @param  object $obj
+     * @return object
+     */
+    public function add(object $obj) {
+        $array = [$obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
+        $obj['categorie']];
+        $response = $this->__call('addNewProduit', $array);
+        return $response;
     }
-
-    public function add($obj, $soapClient) {
-        return $soapClient->addNewProduit($obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
-        $obj['categorie']);
+    
+    /**
+     * Modifier un produit
+     *
+     * @param  int $id
+     * @param  object $obj
+     * @return object
+     */
+    public function update(int $id, object $obj) {
+        $array = [$id, $obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
+        $obj['categorie']];
+        $response = $this->__call('updateProduit', $array);
+        return $response;
     }
-
-    public function update($id, $obj, $soapClient) {
-        return $soapClient->updateProduit($id, $obj['nom'], $obj['description'], $obj['prix'], '', $obj['quantite'],
-        $obj['categorie']);
+    
+    /**
+     * Supprimer un produit
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function delete(int $id) {
+        $response = $this->__call('deleteProduit', array($id));
+        return $response;
     }
 }

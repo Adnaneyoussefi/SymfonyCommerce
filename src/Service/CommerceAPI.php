@@ -8,39 +8,34 @@ use App\Service\Iservice;
 use App\Service\Ressource;
 use App\Service\ProduitService;
 use App\Service\CategorieService;
+use App\Service\RessourceInterface;
 
 class CommerceAPI implements Iservice {
 
-    private Ressource $ressource;
+    private RessourceInterface $ressourceInterface;
 
-    private $api_commerce;
-
-    private $soapClient;
-
-    public function __construct(string $api_commerce, Ressource $ressource)
+    public function __construct(RessourceInterface $ressourceInterface)
     {
-        $this->api_commerce = $api_commerce;
-        $this->ressource = $ressource;
-        $this->soapClient = new \SoapClient($api_commerce);
+        $this->ressourceInterface = $ressourceInterface;
     }
 
     public function getModels(): array {
-        return $this->ressource->getList($this->soapClient);
+        return $this->ressourceInterface->getList();
     }
 
     public function getModelById($id) {
-        return $this->ressource->get($id, $this->soapClient);
+        return $this->ressourceInterface->get($id);
     }
 
     public function deleteModelById($id) {
-        return $this->ressource->delete($id, $this->soapClient);
+        return $this->ressourceInterface->delete($id);
     }
 
     public function addModel($obj) {
-        return $this->ressource->add($obj, $this->soapClient);
+        return $this->ressourceInterface->add($obj);
     }
 
     public function updateModelById($id, $obj) {
-        return $this->ressource->update($id, $obj, $this->soapClient);
+        return $this->ressourceInterface->update($id, $obj);
     }
 }

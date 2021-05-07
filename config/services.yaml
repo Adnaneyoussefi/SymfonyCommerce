@@ -5,14 +5,14 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
-    app.bouchonne: 'off'
+    bouchon.enabled: false
+    bouchon.active_uc: 'WS_X_CHAMPS_VIDES'
+    bouchon.directory: "unit_test/bouchons"
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind:
-            $bouchonne: '%app.bouchonne%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -23,25 +23,34 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
-
-    ressource:
-        class: App\Service\Ressource
+    
+    # Définir le service CategorieService
+    app.categorieService:
+        class: App\Service\CategorieService
         arguments:
-            $bouchonne: '%app.bouchonne%' 
+            $apikey: '%app.api_commerce%'
+
+    App\Service\CategorieService: '@app.categorieService'
+    # Définir le service ProduitService
+    app.produitService:
+        class: App\Service\ProduitService
+        arguments:
+            $apikey: '%app.api_commerce%'
+
+    App\Service\ProduitService: '@app.produitService'
 
 
-    # ajouter le service de CountryAPI
+    # Définir le service CommerceAPI pour ProduitService
     commerce.produit:
         class: App\Service\CommerceAPI
         arguments:
-            $api_commerce: '%app.api_commerce%' 
-            $ressource: '@App\Service\ProduitService'
-        
+            $ressourceInterface: '@app.produitService'
+
+    # Définir le service CommerceAPI pour ProduitService 
     commerce.categorie:
         class: App\Service\CommerceAPI
         arguments:
-            $api_commerce: '%app.api_commerce%' 
-            $ressource: '@App\Service\CategorieService'        
+            $ressourceInterface: '@app.categorieService'        
 
     App\Service\CommerceAPI: '@commerce.produit'
     App\Service\CommerceAPI $c: '@commerce.categorie'      
