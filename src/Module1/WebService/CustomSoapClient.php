@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Service;
+namespace App\Module1\WebService;
 
-use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CustomSoapClient extends \SoapClient
@@ -26,20 +25,25 @@ class CustomSoapClient extends \SoapClient
      */
     public function __call($function_name, $arguments)
     {
+        $moduleName = explode("\\", get_called_class())[1];
         $result = [];
         $enabled = $this->params->get('bouchon.enabled');
         $active_uc = $this->params->get('bouchon.active_uc');
         $directory = $this->params->get('bouchon.directory');
         if ($enabled == true) {
             $xml_path = __DIR__.DIRECTORY_SEPARATOR.'..'
+            .DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
             .DIRECTORY_SEPARATOR.$directory
+            .DIRECTORY_SEPARATOR.$moduleName
             .DIRECTORY_SEPARATOR.$active_uc
-            .DIRECTORY_SEPARATOR.$this->ws_name.'.xml';
+            .DIRECTORY_SEPARATOR.$function_name.'.xml';
 
             if(file_exists($xml_path))
                 $result = $this->convertResponseXML($xml_path);
             else
-                throw new Exception("Le fichier ".$xml_path." n'existe pas");
+                throw new \Exception("Le fichier ".$xml_path." n'existe pas");
+
+            dump(explode("\\", get_called_class())[1]);
 
         } else {
             $result = parent::__call($function_name, $arguments);
@@ -64,7 +68,7 @@ class CustomSoapClient extends \SoapClient
             if(array_key_exists($index, $xml->xpath("//SOAP-ENV:Body/*/*")))
                 $data = $xml->xpath("//SOAP-ENV:Body/*/*")[$index];
             else
-                throw new Zend_Exception('L\'index '.$index.' n\'existe pas dans le tableau.');
+                throw new \Exception('L\'index '.$index.' n\'existe pas dans le tableau.');
             
             //$arrayResult = json_decode(json_encode($data));
             $arrayResult = [];
@@ -78,7 +82,7 @@ class CustomSoapClient extends \SoapClient
                         $arrayResult = $data;
                     }
                     else
-                        throw new Exception('Le résultat est null');
+                        throw new \Exception('Le résultat est null');
                 } 
             }
             else {
@@ -89,7 +93,7 @@ class CustomSoapClient extends \SoapClient
             //var_dump($arrayResult);
             return $arrayResult;
 
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             echo $e->getMessage()." ";
         }
     }

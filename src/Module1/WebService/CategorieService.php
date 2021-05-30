@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Service;
+namespace App\Module1\WebService;
 
-use App\Entity\Produit;
-use App\Entity\Categorie;
-use App\Service\Ressource;
-use App\Service\CustomSoapClient;
-use App\Service\RessourceInterface;
+use App\Module1\Entity\Categorie;
+use App\Module1\Entity\Produit;
+use App\Module1\WebService\CustomSoapClient;
+use App\Module1\WebService\RessourceInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CategorieService extends CustomSoapClient implements RessourceInterface
@@ -53,7 +52,6 @@ class CategorieService extends CustomSoapClient implements RessourceInterface
                 array_push($categoriesObject, $categorie);
             }
         }
-        dump($categoriesObject);
         return $categoriesObject;
     }
     

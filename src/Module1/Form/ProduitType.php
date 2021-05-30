@@ -2,10 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Produit;
-use App\Service\AllData;
-use App\Entity\Categorie;
-use App\Service\CommerceAPI;
+use App\Module1\Entity\Produit;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

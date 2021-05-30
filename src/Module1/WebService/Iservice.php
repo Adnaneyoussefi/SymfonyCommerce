@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Module1\WebService;
 
 interface Iservice {
         

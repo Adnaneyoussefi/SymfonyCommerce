@@ -1,0 +1,5 @@
+parameters:
+    app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
+    bouchon.enabled: true
+    bouchon.active_uc: 'WS_X_CHAMPS_VIDES'
+    bouchon.directory: "tests/mock"

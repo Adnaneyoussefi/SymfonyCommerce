@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'module1/base.html.twig' %}
 
 {% block title %}Hello ProduitController!{% endblock %}
 
@@ -44,7 +44,7 @@
 <td>{{ cat.nom|e }}</td>
 <td><a href='{{ path('categorie_edit', {'id': cat.id}) }}' ><button type='button' class='btn btn-warning'>Modifier</button></a></td>
 <td><a class='btn btn-danger' data-toggle="modal" data-target="#deleteModal{{cat.id}}">Supprimer</a>
-{{ include('categorie/deleteAlert.html.twig') }}
+{{ include('module1/categorie/deleteAlert.html.twig') }}
 </td>
 <td>
 <div style='vertical-align: top;text-align: center; display: inline;'>

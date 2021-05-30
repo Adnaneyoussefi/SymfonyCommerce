@@ -2,11 +2,10 @@
 
 namespace App\Form;
 
-use App\Entity\Categorie;
+use App\Module1\Entity\Categorie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CategorieType extends AbstractType
 {

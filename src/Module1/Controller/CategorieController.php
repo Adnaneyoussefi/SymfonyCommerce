@@ -1,22 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Module1\Controller;
 
-use App\Service\AllData;
-use App\Entity\Categorie;
-use App\Form\CategorieType;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Serializer\Serializer;
+use App\Module1\WebService\AllData;
+use App\Module1\Entity\Categorie;
+use App\Module1\Form\CategorieType;
+use App\Module1\WebService\ExceptionMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 
 class CategorieController extends AbstractController{
 
@@ -26,7 +19,7 @@ class CategorieController extends AbstractController{
     public function index(AllData $commerceCategorie): Response
     {
         $categories = $commerceCategorie->getAllData();
-        return $this->render('categorie/index.html.twig', [
+        return $this->render('module1/categorie/index.html.twig', [
             'categories' => $categories
         ]);
     }
@@ -79,14 +72,28 @@ class CategorieController extends AbstractController{
      */
     public function delete(AllData $commerceCategorie, $id): Response
     {
-        $categorie = $commerceCategorie->getDataById($id);
-        if(count($categorie->getProduits()) == 0) {
-            $commerceCategorie->deleteDataById($id);
-            $this->addFlash('alert', 'La categorie a été supprimé');
+        try
+        {
+            //$categorie = $commerceCategorie->getDataById($id);
+            /*if(count($categorie->getProduits()) == 0) {
+                $commerceCategorie->deleteDataById($id);
+                $this->addFlash('success', 'La catégorie a été bien supprimé');
+            }*/
+            $response = $commerceCategorie->deleteDataById($id);
+            if($response->code != '204')
+                throw new ExceptionMessage($response->msg, $response->code);
+            return $this->redirectToRoute('categories');
+            //dd($response);
+            /*else {
+                throw new ExceptionMessage
+                $this->addFlash('warning', 'Attention la categorie est associée à un produit !!');
+            }*/
+        } catch(\Exception $e)
+        {
+            $this->addFlash('alert', $e->getMessage());
+            return $this->redirectToRoute('categories');
         }
-        else {
-            $this->addFlash('warning', 'Attention la categorie est associée à un produit !!');
-        }
-        return $this->redirectToRoute('categories');
+        
+        
     }
 }

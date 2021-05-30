@@ -1,14 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Module1\WebService;
 
-use App\Entity\Produit;
-use App\Entity\Categorie;
-use App\Service\Iservice;
-use App\Service\Ressource;
-use App\Service\ProduitService;
-use App\Service\CategorieService;
-use App\Service\RessourceInterface;
+use App\Module1\WebService\Iservice;
+use App\Module1\WebService\RessourceInterface;
 
 class CommerceAPI implements Iservice {
 

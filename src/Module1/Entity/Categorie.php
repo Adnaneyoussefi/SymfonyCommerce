@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Module1\Entity;
 
-use App\Entity\Produit;
+use App\Module1\Entity\Produit;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;

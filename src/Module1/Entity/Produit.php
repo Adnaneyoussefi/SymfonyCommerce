@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Module1\Entity;
 
-use App\Entity\Categorie;
+use App\Module1\Entity\Categorie;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class Produit
