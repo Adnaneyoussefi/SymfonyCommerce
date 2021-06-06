@@ -1,5 +1,16 @@
 parameters:
-    app.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
-    bouchon.enabled: true
+    
+    bouchon.enabled: false
     bouchon.active_uc: 'WS_X_CHAMPS_VIDES'
     bouchon.directory: "tests/mock"
+
+    #wsdl
+    ws.api_commerce.wsdl: '%kernel.project_dir%/config/wsdl/commerce.wsdl'
+
+    #ws soap
+    ws.api_commerce: 'http://127.0.0.1:8000/soap?wsdl'
+
+    #ws rest
+    ws:
+        jsonplaceholder:
+            rest: 'https://jsonplaceholder.typicode.com'

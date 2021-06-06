@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Module1\WebService;
+namespace App\WebService;
 
-use App\Module1\WebService\Iservice;
+use App\WebService\Iservice;
 
 class AllData {
 

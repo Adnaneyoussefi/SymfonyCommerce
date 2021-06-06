@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module1\WebService;
+namespace App\WebService;
 
 class ExceptionMessage extends \Exception
 {

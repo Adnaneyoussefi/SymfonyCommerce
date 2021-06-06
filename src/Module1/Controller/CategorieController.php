@@ -2,16 +2,16 @@
 
 namespace App\Module1\Controller;
 
-use App\Module1\WebService\AllData;
+use App\WebService\AllData;
 use App\Module1\Entity\Categorie;
+use App\Controller\GlobalController;
 use App\Module1\Form\CategorieType;
-use App\Module1\WebService\ExceptionMessage;
+use App\WebService\ExceptionMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class CategorieController extends AbstractController{
+class CategorieController extends GlobalController{
 
     /**
      * @Route("/categories", name="categories")

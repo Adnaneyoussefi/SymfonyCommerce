@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module1\WebService;
+namespace App\WebService\Soap;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -10,10 +10,10 @@ class CustomSoapClient extends \SoapClient
 
     private $params;
 
-    public function __construct(string $apikey, ParameterBagInterface $params)
+    public function __construct(string $wsdl , array $options = [], ParameterBagInterface $params)
     {
-        parent::__construct($apikey);
         $this->params = $params;
+        parent::__construct($wsdl, $options);
     }
     
     /**
@@ -25,16 +25,14 @@ class CustomSoapClient extends \SoapClient
      */
     public function __call($function_name, $arguments)
     {
-        $moduleName = explode("\\", get_called_class())[1];
         $result = [];
         $enabled = $this->params->get('bouchon.enabled');
         $active_uc = $this->params->get('bouchon.active_uc');
         $directory = $this->params->get('bouchon.directory');
         if ($enabled == true) {
-            $xml_path = __DIR__.DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+            $xml_path = $this->params->get('kernel.project_dir')
             .DIRECTORY_SEPARATOR.$directory
-            .DIRECTORY_SEPARATOR.$moduleName
+            .DIRECTORY_SEPARATOR.MODULE_NAME
             .DIRECTORY_SEPARATOR.$active_uc
             .DIRECTORY_SEPARATOR.$function_name.'.xml';
 

@@ -15,3 +15,15 @@ framework:
     #fragments: true
     php_errors:
         log: true
+    
+    http_client:
+        scoped_clients:
+            jsonplaceholder.client:
+                base_uri: 'https://jsonplaceholder.typicode.com'
+                headers:
+                    Accept: 'application/json'
+            github.client:
+                        base_uri: 'https://api.github.com'
+                        headers:
+                            Accept: 'application/vnd.github.v3+json'
+                            Authorization: 'token FOO BLABLA%'

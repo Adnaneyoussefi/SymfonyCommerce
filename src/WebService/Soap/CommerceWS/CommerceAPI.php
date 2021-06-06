@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Module1\WebService;
+namespace App\WebService\Soap\CommerceWS;
 
-use App\Module1\WebService\Iservice;
-use App\Module1\WebService\RessourceInterface;
+use App\WebService\Iservice;
+use App\WebService\RessourceInterface;
 
 class CommerceAPI implements Iservice {
 

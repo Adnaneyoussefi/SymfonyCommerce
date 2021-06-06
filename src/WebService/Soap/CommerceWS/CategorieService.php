@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Module1\WebService;
+namespace App\WebService\Soap\CommerceWS;
 
 use App\Module1\Entity\Categorie;
 use App\Module1\Entity\Produit;
-use App\Module1\WebService\CustomSoapClient;
-use App\Module1\WebService\RessourceInterface;
+use App\WebService\Soap\CustomSoapClient;
+use App\WebService\RessourceInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CategorieService extends CustomSoapClient implements RessourceInterface
 {
 
-    public function __construct(string $apikey, ParameterBagInterface $params)
+    public function __construct(string $wsdl, array $options = [], ParameterBagInterface $params)
     {   
-        parent::__construct($apikey, $params);
+        parent::__construct($wsdl, $options, $params);
     }
   
     /**

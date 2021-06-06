@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="urn:commerceservicewsdl"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:commerceservicewsdl">
+
+    <types>
+        <xsd:schema targetNamespace="urn:commerceservicewsdl">
+            <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+            <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+
+            <xsd:complexType name="Message">
+                <xsd:all>
+                    <xsd:element name="msg" type="xsd:string"/>
+                    <xsd:element name="code" type="xsd:string"/>    
+                </xsd:all>
+            </xsd:complexType>
+
+
+            <xsd:complexType name="Categorie">
+                <xsd:all>
+                    <xsd:element name="id" type="xsd:int"/>
+                    <xsd:element name="nom" type="xsd:string"/>
+                    <xsd:element name="produits" type="tns:ListeProduits"/>
+                </xsd:all>
+            </xsd:complexType>
+
+            <xsd:complexType name="ListeCategories">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Categorie[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="Produit">
+                <xsd:all>
+                    <xsd:element name="id" type="xsd:int"/>
+                    <xsd:element name="nom" type="xsd:string"/>
+                    <xsd:element name="description" type="xsd:string"/>
+                    <xsd:element name="prix" type="xsd:float"/>
+                    <xsd:element name="image" type="xsd:string"/>
+                    <xsd:element name="quantite" type="xsd:int"/>
+                    <xsd:element name="categorie" type="xsd:Categorie"/>
+                </xsd:all>
+            </xsd:complexType>
+
+            <xsd:complexType name="ListeProduits">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Produit[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <!--get catégorie-->
+    <message name="getCategorieByIdRequest">
+        <part name="id" type="xsd:string"/>
+    </message>
+    <message name="getCategorieByIdResponse">
+        <part name="return" type="tns:Categorie"/>
+    </message>
+    <!--get list catégories-->
+    <message name="getListCategoriesRequest">
+    </message>
+    <message name="getListCategoriesResponse">
+        <part name="return" type="tns:ListeCategories"/>
+    </message>
+    <!--ajouter catégorie-->
+    <message name="ajouterCategorieRequest">
+        <part name="nom" type="xsd:string"/>
+    </message>
+    <message name="ajouterCategorieResponse">
+        <part name="return" type="tns:Message"/>
+    </message>
+    <!--editer catégorie-->
+    <message name="editerCategorieRequest">
+        <part name="id" type="xsd:string"/>
+        <part name="nom" type="xsd:string"/>
+    </message>
+    <message name="editerCategorieResponse">
+        <part name="return" type="tns:Message"/>
+    </message>
+    <!--supprimer catégorie-->
+    <message name="supprimerCategorieRequest">
+        <part name="id" type="xsd:string"/>
+    </message>
+    <message name="supprimerCategorieResponse">
+        <part name="return" type="tns:Message"/>
+    </message>
+
+    <!--get produit-->
+    <message name="getProduitByIdRequest">
+        <part name="id" type="xsd:string"/>
+    </message>
+    <message name="getProduitByIdResponse">
+        <part name="return" type="tns:Produit"/>
+    </message>
+    <!--get list produits-->
+    <message name="getListProduitsRequest">
+    </message>
+    <message name="getListProduitsResponse">
+        <part name="return" type="tns:ListeProduits"/>
+    </message>
+    <!--ajouter produit-->
+    <message name="ajouterProduitRequest">
+        <part name="nom" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="prix" type="xsd:float"/>
+        <part name="image" type="xsd:string"/>
+        <part name="quantite" type="xsd:int"/>
+        <part name="categorie_id" type="xsd:string"/>
+    </message>
+    <message name="ajouterProduitResponse">
+        <part name="return" type="xsd:Message"/>
+    </message>
+    <!--editer catégorie-->
+    <message name="editerProduitRequest">
+        <part name="id" type="xsd:string"/>
+        <part name="nom" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="prix" type="xsd:float"/>
+        <part name="image" type="xsd:string"/>
+        <part name="quantite" type="xsd:int"/>
+        <part name="categorie_id" type="xsd:string"/>
+    </message>
+    <message name="editerProduitResponse">
+        <part name="return" type="tns:Message"/>
+    </message>
+    <!--supprimer produit-->
+    <message name="supprimerProduitRequest">
+        <part name="id" type="xsd:string"/>
+    </message>
+    <message name="supprimerProduitResponse">
+        <part name="return" type="tns:Message"/>
+    </message>
+
+    <portType name="commercewsdlPortType">
+        <!--Categorie-->
+        <operation name="getCategorieById">
+            <documentation>Return une categorie</documentation>
+            <input message="tns:getCategorieByIdRequest"/>
+            <output message="tns:getCategorieByIdResponse"/>
+        </operation>
+
+        <operation name="getListCategories">
+            <documentation>Return la liste des categories</documentation>
+            <input message="tns:getListCategoriesRequest"/>
+            <output message="tns:getListCategoriesResponse"/>
+        </operation>
+
+        <operation name="addNewCategorie">
+            <documentation>Ajouter une categorie</documentation>
+            <input message="tns:ajouterCategorieRequest"/>
+            <output message="tns:ajouterCategorieResponse"/>
+        </operation>
+
+        <operation name="updateCategorie">
+            <documentation>editer une categorie</documentation>
+            <input message="tns:editerCategorieRequest"/>
+            <output message="tns:editerCategorieResponse"/>
+        </operation>
+
+        <operation name="deleteCategorie">
+            <documentation>Supprimer une categorie</documentation>
+            <input message="tns:supprimerCategorieRequest"/>
+            <output message="tns:supprimerCategorieResponse"/>
+        </operation>
+
+        <!--Produit-->
+        <operation name="getProduitById">
+            <documentation>Return un produit</documentation>
+            <input message="tns:getProduitByIdRequest"/>
+            <output message="tns:getProduitByIdResponse"/>
+        </operation>
+
+        <operation name="getListProduits">
+            <documentation>Return la liste des produits</documentation>
+            <input message="tns:getListProduitsRequest"/>
+            <output message="tns:getListProduitsResponse"/>
+        </operation>
+
+        <operation name="addNewProduit">
+            <documentation>Ajouter un produit</documentation>
+            <input message="tns:ajouterProduitRequest"/>
+            <output message="tns:ajouterProduitResponse"/>
+        </operation>
+
+        <operation name="updateProduit">
+            <documentation>editer un produit</documentation>
+            <input message="tns:editerProduitRequest"/>
+            <output message="tns:editerProduitResponse"/>
+        </operation>
+
+        <operation name="deleteProduit">
+            <documentation>Supprimer un produit</documentation>
+            <input message="tns:supprimerProduitRequest"/>
+            <output message="tns:supprimerProduitResponse"/>
+        </operation>
+
+    </portType>
+
+    <binding name="commercewsdlBinding" type="tns:commercewsdlPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <!--Categorie-->
+        <operation name="getCategorieById">
+            <soap:operation soapAction="urn:commerceservicewsdl#getCategorieByIdServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="getListCategories">
+            <soap:operation soapAction="urn:commerceservicewsdl#getListCategoriesServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="addNewCategorie">
+            <soap:operation soapAction="urn:commerceservicewsdl#addNewCategorieServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="updateCategorie">
+            <soap:operation soapAction="urn:commerceservicewsdl#updateCategorieServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="deleteCategorie">
+            <soap:operation soapAction="urn:commerceservicewsdl#deleteCategorieServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <!--Produit-->
+        <operation name="getProduitById">
+            <soap:operation soapAction="urn:commerceservicewsdl#getProduitByIdServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="getListProduits">
+            <soap:operation soapAction="urn:commerceservicewsdl#getListProduitsServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="addNewProduit">
+            <soap:operation soapAction="urn:commerceservicewsdl#addNewProduitServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="updateProduit">
+            <soap:operation soapAction="urn:commerceservicewsdl#updateProduitServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="deleteProduit">
+            <soap:operation soapAction="urn:commerceservicewsdl#deleteProduitServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:commerceservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="commercewsdl">
+        <port name="commercewsdlPort" binding="tns:commercewsdlBinding">
+            <soap:address location="http://127.0.0.1:8000/soap"/>
+        </port>
+    </service>
+</definitions>
